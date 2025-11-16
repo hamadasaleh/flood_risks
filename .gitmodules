@@ -1,0 +1,3 @@
+[submodule "cama_flood"]
+	path = cama_flood
+	url = https://github.com/global-hydrodynamics/CaMa-Flood_v4.git
