@@ -2,6 +2,7 @@
 Configuration for CaMa-Flood simulations
 """
 
+import os
 import re
 import shutil
 import subprocess
@@ -27,10 +28,6 @@ class CaMaFloodConfig(BaseModel):
     executable_path: Optional[Path] = Field(
         None,
         description="Path to compiled CaMa-Flood executable. If not provided, will be set to base_dir/src/MAIN_cmf"
-    )
-    auto_compile: bool = Field(
-        True,
-        description="If True, automatically compile the executable if it doesn't exist"
     )
     experiment_name: str = Field(..., description="Experiment name (used for output directory)")
     
@@ -223,18 +220,9 @@ class CaMaFloodConfig(BaseModel):
         if self.executable_path is None:
             self.executable_path = self.base_dir / "src" / "MAIN_cmf"
         
-        # Check and compile executable if needed
-        if not self.executable_path.exists():
-            if self.auto_compile:
-                logger.info(f"Executable not found at {self.executable_path}, attempting to compile...")
-                self._compile_executable()
-            else:
-                raise FileNotFoundError(
-                    f"Executable not found at {self.executable_path}. "
-                    "Set auto_compile=True to automatically compile, or compile manually."
-                )
-        else:
-            logger.info(f"Executable found at {self.executable_path}")
+        # Always compile executable
+        logger.info(f"Compiling executable at {self.executable_path}...")
+        self._compile_executable()
         
         # Generate channel parameters if needed (rivhgt.bin, rivwth.bin, etc.)
         self._generate_channel_params()

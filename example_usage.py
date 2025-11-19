@@ -1,28 +1,55 @@
 """
 Simple example of using the CaMa-Flood Python API
+
+Loads configuration from config.toml file.
 """
+
+from pathlib import Path
+
+try:
+    import tomllib  # Python 3.11+
+except ImportError:
+    try:
+        import tomli as tomllib  # tomli for Python < 3.11
+    except ImportError:
+        raise ImportError(
+            "TOML library required. Install with: pip install tomli (Python < 3.11) "
+            "or use Python 3.11+ (tomllib included)"
+        )
 
 from src.cama_flood_api import CaMaFloodConfig, CaMaFloodRunner
 
-# Option 1: Using tar.gz and tar files (will be extracted automatically)
-# map_name is auto-extracted from filename (glb_01min.tar.gz -> glb_01min)
-# runoff_name is auto-extracted from filename (E2O_ecmwf.tar -> E2O_ecmwf)
-# runoff_prefix is auto-detected from files in the extracted directory
-config = CaMaFloodConfig(
-    base_dir="./cama_flood",
-    map_tar_gz="./data/glb_15min.tar.gz",  # Extracts to cama_flood/map/glb_15min/
-    runoff_tar="./data/E2O_ecmwf.tar",  # Extracts to cama_flood/inp/E2O_ecmwf/
-    climatology_tar="./data/climatology_runoff.tar.gz",  # Extracts to cama_flood/map/data/
-    start_year=1980,
-    end_year=1981,  # Just 2 years for testing
-    # executable_path will default to ./cama_flood/src/MAIN_cmf if not provided
-    # auto_compile=True will automatically compile if executable doesn't exist
-    experiment_name="my_test_simulation"
-    # Time resolution parameters use defaults:
-    # dt=3600 (1 hour), ladpstp=True, pcadp=0.7, ifrq_inp=24, ifrq_out=24
-)
+# Load configuration from config.toml
+config_path = Path(__file__).parent / "config.toml"
 
+if not config_path.exists():
+    raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
+with open(config_path, "rb") as f:
+    config_dict = tomllib.load(f)
+
+# Convert string paths to Path objects
+for key in ["base_dir", "map_tar_gz", "runoff_tar", "climatology_tar"]:
+    if key in config_dict:
+        config_dict[key] = Path(config_dict[key])
+
+# Handle optional paths
+if "executable_path" in config_dict and config_dict["executable_path"]:
+    config_dict["executable_path"] = Path(config_dict["executable_path"])
+
+if "dimension_info_file" in config_dict and config_dict["dimension_info_file"]:
+    config_dict["dimension_info_file"] = Path(config_dict["dimension_info_file"])
+
+if "input_matrix_file" in config_dict and config_dict["input_matrix_file"]:
+    config_dict["input_matrix_file"] = Path(config_dict["input_matrix_file"])
+
+# Create config from TOML
+config = CaMaFloodConfig(**config_dict)
+
+print(f"Loaded configuration from {config_path}")
+print(f"Experiment: {config.experiment_name}")
+print(f"Years: {config.start_year} - {config.end_year}")
+print(f"Output format: {'NetCDF' if config.loutcdf else 'Binary'}")
 
 # Run the simulation using context manager
 with CaMaFloodRunner(config) as runner:
