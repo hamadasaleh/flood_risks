@@ -1,0 +1,45 @@
+# CaMa-Flood Configuration File (single-year 2050 run)
+# Separate config so existing config.toml remains unchanged.
+
+# Base directory of CaMa-Flood installation
+base_dir = "./cama_flood"
+
+# Experiment name (used for output directory)
+experiment_name = "runoff_2050_single_year"
+
+# Simulation time range (single-year run)
+start_year = 2050
+end_year = 2050
+
+# Map data configuration
+# Path to map tar.gz file (will be extracted to base_dir/map/{map_name}/)
+map_tar_gz = "./data/glb_15min.tar.gz"
+# map_name is auto-extracted from filename (glb_15min.tar.gz -> glb_15min)
+
+# Runoff data configuration
+# Path to runoff tar file (will be extracted to base_dir/inp/{runoff_name}/)
+runoff_tar = "./data/Runoff_2050.tar"
+# runoff_prefix is auto-detected from files in the extracted directory
+
+# Climatology data configuration
+# Path to climatology tar/tar.gz file (will be extracted to base_dir/map/data/)
+climatology_tar = "./data/climatology_runoff.tar.gz"
+
+# Compilation configuration
+# If True, compile with NetCDF support. If False, compile without NetCDF (binary output only)
+compile_with_netcdf = true
+
+# Time resolution parameters
+dt = 7200
+ladpstp = true
+pcadp = 0.7
+ifrq_inp = 24
+ifrq_out = 24
+
+# Output format configuration
+loutcdf = false
+output_variables = "outflw,storge,flddph,fldfrc,maxdph"
+
+# Optional: Override default paths
+# dimension_info_file = "./cama_flood/map/glb_15min/diminfo_test-1deg_grid.txt"
+# input_matrix_file = "./cama_flood/map/glb_15min/inpmat_test-1deg_grid.bin"

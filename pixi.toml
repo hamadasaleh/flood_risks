@@ -1,4 +1,4 @@
-[project]
+[workspace]
 authors = ["Hamada Saleh <hamada.kslh@gmail.com>"]
 channels = ["conda-forge"]
 description = "Add a short description here"
@@ -18,7 +18,7 @@ f90nml = ">=1.4.4,<2"
 gfortran = ">=15.2.0,<15.3"
 netcdf-fortran = "*"
 tqdm = ">=4.66.0"
-netcdf4 = "*"
+netcdf4 = ">=1.7.3,<2"
 ipykernel = ">=7.1.0,<8"
 flox = ">=0.10.7,<0.11"
 zarr = ">=3.1.5,<4"
@@ -30,12 +30,17 @@ skrub = ">=0.6.2,<0.7"
 fsspec = ">=2025.10.0,<2026"
 gcsfs = ">=2025.10.0,<2026"
 xarray = ">=2025.11.0,<2026"
-dask = "2024.11.2"
+dask = ">=2025.11.0,<2026"
 cf_xarray = ">=0.10.9,<0.11"
 xesmf = ">=0.8.10,<0.9"
 xmip = ">=0.7.2,<0.8"
 intake-esm = ">=2024.2.6,<2025"
 setuptools = "<81"
+numcodecs = ">=0.16.1,<0.17"
+streamlit = ">=1.52.2,<2"
+cartopy = ">=0.25.0,<0.26"
+plotly = ">=6.5.2,<7"
+seaborn = ">=0.13.2,<0.14"
 
 
 [pypi-dependencies]

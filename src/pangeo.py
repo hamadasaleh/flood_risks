@@ -159,11 +159,11 @@ if __name__ == "__main__":
     col = intake.open_esm_datastore(url)
     z_kwargs = {"consolidated": True, "decode_times": True, "use_cftime": True}
     query = {
-        "institution_id": "MRI",
-        "source_id": "MRI-ESM2-0",
-        "experiment_id": "historical",
-        "member_id": "r6i1p1f1",
-        "table_id": "Lmon",
+        "institution_id": "BCC",
+        "source_id": "BCC-CSM2-MR",
+        "experiment_id": "ssp585", #"historical",
+        "member_id": "r1i1p1f1",
+        "table_id": "day",
         "variable_id": "mrro",
         "grid_label": "gn"
 

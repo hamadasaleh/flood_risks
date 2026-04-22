@@ -1,9 +1,10 @@
 """
 Simple example of using the CaMa-Flood Python API
 
-Loads configuration from config.toml file.
+Loads configuration from a TOML file.
 """
 
+import argparse
 from pathlib import Path
 
 try:
@@ -19,8 +20,18 @@ except ImportError:
 
 from src.cama_flood_api import CaMaFloodConfig, CaMaFloodRunner
 
-# Load configuration from config.toml
-config_path = Path(__file__).parent / "config.toml"
+parser = argparse.ArgumentParser(description="Run CaMa-Flood from a TOML configuration.")
+parser.add_argument(
+    "--config",
+    default="config.toml",
+    help="Path to TOML config file (default: config.toml)",
+)
+args = parser.parse_args()
+
+# Load configuration from selected TOML file
+config_path = Path(args.config)
+if not config_path.is_absolute():
+    config_path = Path(__file__).parent / config_path
 
 if not config_path.exists():
     raise FileNotFoundError(f"Configuration file not found: {config_path}")

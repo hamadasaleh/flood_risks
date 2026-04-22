@@ -100,6 +100,10 @@ class CaMaFloodConfig(BaseModel):
         False,
         description="Use NetCDF format for output files (default: False = binary format). If True, outputs are .nc files instead of .bin files."
     )
+    output_variables: str = Field(
+        "rivout,rivsto,rivdph,rivvel,fldout,fldsto,flddph,fldfrc,fldare,sfcelv,outflw,storge,pthflw,pthout,maxsto,maxflw,maxdph",
+        description="Comma-separated CaMa-Flood output variables written to CVARSOUT."
+    )
     
     @field_validator('base_dir', mode='before')
     @classmethod
@@ -248,6 +252,7 @@ class CaMaFloodConfig(BaseModel):
         logger.info(f"    Input frequency: {self.ifrq_inp} hours")
         logger.info(f"    Output frequency: {self.ifrq_out} hours")
         logger.info(f"    Output format: {'NetCDF' if self.loutcdf else 'Binary'}")
+        logger.info(f"    Output variables: {self.output_variables}")
         logger.debug(f"Dimension info file: {self.dimension_info_file}")
         logger.debug(f"Input matrix file: {self.input_matrix_file}")
         
@@ -459,6 +464,14 @@ class CaMaFloodConfig(BaseModel):
         if not (0.1 <= v <= 1.0):
             raise ValueError(f"pcadp ({v}) should be between 0.1 and 1.0 for stability")
         return v
+
+    @field_validator('output_variables')
+    @classmethod
+    def validate_output_variables(cls, v):
+        """Validate output variable list is not empty"""
+        if not v or not v.strip():
+            raise ValueError("output_variables must be a non-empty comma-separated string")
+        return v.strip()
     
     def get_output_dir(self) -> Path:
         """Get the output directory path"""

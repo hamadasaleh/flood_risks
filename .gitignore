@@ -1,5 +1,6 @@
 data/
 .logs/
+__init__.py/
 **/__pycache__/
 *.pyc
 # pixi environments

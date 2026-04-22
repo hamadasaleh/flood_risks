@@ -114,7 +114,7 @@ def generate_namelist(config: CaMaFloodConfig, output_path: Path, year: int) -> 
         },
         "NOUTPUT": {
             "COUTDIR": "./",  # OUTPUT DIRECTORY
-            "CVARSOUT": "rivout,rivsto,rivdph,rivvel,fldout,fldsto,flddph,fldfrc,fldare,sfcelv,outflw,storge,pthflw,pthout,maxsto,maxflw,maxdph",  # Comma-separated list of output variables to save
+            "CVARSOUT": config.output_variables,  # Comma-separated list of output variables to save
             "COUTTAG": couttag,  # Output Tag Name for each experiment
             "LOUTCDF": config.loutcdf,  # true for netcdf output false for binary
             "NDLEVEL": 0,  # * NETCDF DEFLATION LEVEL (only used if LOUTCDF=True)
