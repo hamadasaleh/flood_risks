@@ -96,6 +96,18 @@ class CaMaFloodConfig(BaseModel):
         24,
         description="Output data write frequency in hours (default: 24 = daily). How often to write averaged output files."
     )
+    shour: int = Field(
+        0,
+        description="Simulation start hour (0-23). Use 12 to align model clock with noon-based forcing."
+    )
+    shourin: int = Field(
+        0,
+        description="Start hour of NetCDF input forcing time axis (0-23). Use 12 if forcing timestamps are at 12:00."
+    )
+    drofunit: int = Field(
+        86400000,
+        description="Runoff unit conversion factor used by CaMa-Flood (InpUnit / DROFUNIT = m/s)."
+    )
     loutcdf: bool = Field(
         False,
         description="Use NetCDF format for output files (default: False = binary format). If True, outputs are .nc files instead of .bin files."
@@ -251,6 +263,7 @@ class CaMaFloodConfig(BaseModel):
             logger.info(f"    Courant coefficient (PCADP): {self.pcadp}")
         logger.info(f"    Input frequency: {self.ifrq_inp} hours")
         logger.info(f"    Output frequency: {self.ifrq_out} hours")
+        logger.info(f"    Runoff conversion (DROFUNIT): {self.drofunit}")
         logger.info(f"    Output format: {'NetCDF' if self.loutcdf else 'Binary'}")
         logger.info(f"    Output variables: {self.output_variables}")
         logger.debug(f"Dimension info file: {self.dimension_info_file}")
@@ -455,6 +468,22 @@ class CaMaFloodConfig(BaseModel):
         """Validate frequency is positive"""
         if v <= 0:
             raise ValueError(f"Frequency must be > 0, got {v}")
+        return v
+
+    @field_validator('shour', 'shourin')
+    @classmethod
+    def validate_hour_field(cls, v):
+        """Validate hour field is in valid range"""
+        if not (0 <= v <= 23):
+            raise ValueError(f"Hour must be between 0 and 23, got {v}")
+        return v
+
+    @field_validator('drofunit')
+    @classmethod
+    def validate_drofunit(cls, v):
+        """Validate runoff conversion factor is positive"""
+        if v <= 0:
+            raise ValueError(f"drofunit must be > 0, got {v}")
         return v
     
     @field_validator('pcadp')

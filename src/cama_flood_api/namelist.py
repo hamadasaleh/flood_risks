@@ -21,7 +21,7 @@ def generate_namelist(config: CaMaFloodConfig, output_path: Path, year: int) -> 
     syear = year
     smon = 1
     sday = 1
-    shour = 0
+    shour = config.shour
     eyear = year + 1
     emon = 1
     eday = 1
@@ -104,13 +104,13 @@ def generate_namelist(config: CaMaFloodConfig, output_path: Path, year: int) -> 
             "LINPCDF": True,  # true for netCDF runoff
             "LINTERP": True,  # true for runoff interpolation using input matrix
             "CINPMAT": str(config.input_matrix_file),  # input matrix file name
-            "DROFUNIT": 86400000,  # runoff unit conversion
+            "DROFUNIT": config.drofunit,  # runoff unit conversion
             "CROFCDF": str(runoff_file),  # * netCDF input runoff file name
             "CVNROF": "Runoff",  # * netCDF input runoff variable name
             "SYEARIN": year,  # * netCDF input start year
             "SMONIN": 1,  # * netCDF input start month
             "SDAYIN": 1,  # * netCDF input start day
-            "SHOURIN": 0,  # * netCDF input start hour
+            "SHOURIN": config.shourin,  # * netCDF input start hour
         },
         "NOUTPUT": {
             "COUTDIR": "./",  # OUTPUT DIRECTORY

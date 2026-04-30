@@ -35,10 +35,14 @@ ladpstp = true
 pcadp = 0.7
 ifrq_inp = 24
 ifrq_out = 24
+shour = 12 # Start simulation at noon to align with forcing timestamps
+shourin = 12 # Input forcing timestamps are at 12:00
+# Use drofunit = 86400000 if runoff unit is mm/day.
+drofunit = 1000 # mm/s -> m/s for CMIP-style runoff
 
 # Output format configuration
 loutcdf = false
-output_variables = "outflw,storge,flddph,fldfrc,maxdph"
+output_variables = "flddph,maxdph"
 
 # Optional: Override default paths
 # dimension_info_file = "./cama_flood/map/glb_15min/diminfo_test-1deg_grid.txt"

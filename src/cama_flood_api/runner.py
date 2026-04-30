@@ -108,8 +108,13 @@ class CaMaFloodRunner:
         
         # Setup progress tracking
         log_file = self.run_dir / "log_CaMa.txt"
-        start_date = datetime(self.config.start_year, 1, 1, 0, 0)
+        start_date = datetime(self.config.start_year, 1, 1, self.config.shour, 0)
         end_date = datetime(self.config.end_year + 1, 1, 1, 0, 0)  # End of end_year
+
+        # Ensure progress parsing only sees current run output.
+        # CaMa appends to log_CaMa.txt by default, which can confuse the tracker.
+        if log_file.exists():
+            log_file.unlink()
         
         if self.show_progress:
             self.progress_tracker = CaMaFloodProgressTracker(
